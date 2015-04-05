@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+{% block title %}Homepage{% endblock %}
+{% block body %}
+    <ul>
+    {%  for videoitem in result %}
+        <li>{{ videoitem.id }}</li>
+        <li>Title: <a href="{{ path('_video_watch', {'id': videoitem.id }) }}">{{ videoitem.title }}</a></li>
+        <li>Description: {{ videoitem.description }}</li>
+        <li>Date created: {{ videoitem.createdAt.date }}</li>
+        <li>File path: {{ videoitem.path }}</li>
+        <li>Author id: {{ videoitem.author }}</li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+_video_homepage:
+    path:     /
+    defaults: { _controller: SadbotVideoBundle:Default:index }
+
+_video_upload:
+  path:   /upload
+  defaults: { _controller: SadbotVideoBundle:Default:upload }
+
+_video_watch:
+  path: /watch/{vid}
+  defaults: { _controller: SadbotVideoBundle:Default:watchVideo }
