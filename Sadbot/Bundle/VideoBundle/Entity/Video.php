@@ -98,6 +98,10 @@ class Video
     private $tags;
 
     private $temp;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $thumb;
 
     public function __construct()
     {

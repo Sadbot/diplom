@@ -7,5 +7,5 @@ _video_upload:
   defaults: { _controller: SadbotVideoBundle:Default:upload }
 
 _video_watch:
-  path: /watch/{vid}
+  path: /watch/{id}
   defaults: { _controller: SadbotVideoBundle:Default:watchVideo }

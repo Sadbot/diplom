@@ -13,14 +13,4 @@ class VideoRepository extends EntityRepository{
             ->getResult();
     }
 
-    public function delAllVideo()
-    {
-        return $this->getEntityManager()
-            ->createQueryBuilder()
-            ->delete('v')
-            ->from('v','Video')
-            ->getMaxResults();
-
-    }
-
 }

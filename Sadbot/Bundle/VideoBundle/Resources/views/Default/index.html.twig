@@ -3,12 +3,16 @@
 {% block body %}
     <ul>
     {%  for videoitem in result %}
-        <li>{{ videoitem.id }}</li>
-        <li>Title: <a href="{{ path('_video_watch', {'id': videoitem.id }) }}">{{ videoitem.title }}</a></li>
-        <li>Description: {{ videoitem.description }}</li>
-        <li>Date created: {{ videoitem.createdAt.date }}</li>
-        <li>File path: {{ videoitem.path }}</li>
-        <li>Author id: {{ videoitem.author }}</li>
+
+            <li>{{ videoitem.id }}</li>
+            <li>Title: <a href="{{ path('_video_watch', {'id': videoitem.id }) }}">{{ videoitem.title }}</a></li>
+            <li>Description: {{ videoitem.description }}</li>
+            <li>File path: {{ videoitem.path }}</li>
+            <img src="{{ asset('uploads/thumbnails/') }}videoitem.thumb"/>
+            <li>Author: {{ videoitem.author }}</li>
+            <li>Date created: {{ videoitem.createdAt.date }}</li>
+            <li>tags: {% for tag in videoitem.tags %}{{ videoitem.tag }}{% endfor %}</li>
+
     {% endfor %}
     </ul>
 

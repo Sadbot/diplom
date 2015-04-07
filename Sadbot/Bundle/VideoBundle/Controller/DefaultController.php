@@ -50,15 +50,11 @@ class DefaultController extends Controller
     }
 
 
-    public function watchVideoAction(\Sadbot\Bundle\VideoBundle\Entity\Video $id){
+    public function watchVideoAction($id){
 
         $em = $this->getDoctrine()->getManager();
         $video = $em->getRepository('SadbotVideoBundle:Video')
             ->findOneById($id);
-
-        if(!video){
-            return $this->Response('Not found!');
-        }
 
         return $this->render('SadbotVideoBundle:Watch:watch.html.twig',array(
             'video' => $video
