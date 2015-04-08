@@ -1,11 +1,23 @@
 _video_homepage:
-    path:     /
-    defaults: { _controller: SadbotVideoBundle:Default:index }
+  path: /
+  defaults: { _controller: SadbotVideoBundle:Video:index }
 
-_video_upload:
-  path:   /upload
-  defaults: { _controller: SadbotVideoBundle:Default:upload }
+_video_create:
+  path: /upload
+  defaults: { _controller: SadbotVideoBundle:Video:create }
 
-_video_watch:
-  path: /watch/{id}
-  defaults: { _controller: SadbotVideoBundle:Default:watchVideo }
+_video_show:
+  path: /{id}
+  defaults: { _controller: SadbotVideoBundle:Video:show }
+
+_video_edit:
+  path: /{id}/edit
+  defaults: { _controller: SadbotVideoBundle:Video:edit }
+
+_video_update:
+  path: /{id}
+  defaults: { _controller: SadbotVideoBundle:Video:update }
+
+_video_delete:
+  path: /{id}
+  defaults: { _controller: SadbotVideoBundle:Video:delete }
