@@ -1,0 +1,112 @@
+<?php
+
+namespace Sadbot\Bundle\VideoBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tags
+ *
+ * @ORM\Table(name="tags")
+ * @ORM\Entity
+ */
+class Tags
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=45, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Video", mappedBy="tag")
+     */
+    private $video;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->video = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Tags
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Add video
+     *
+     * @param \Sadbot\Bundle\VideoBundle\Entity\Video $video
+     * @return Tags
+     */
+    public function addVideo(\Sadbot\Bundle\VideoBundle\Entity\Video $video)
+    {
+        $this->video[] = $video;
+
+        return $this;
+    }
+
+    /**
+     * Remove video
+     *
+     * @param \Sadbot\Bundle\VideoBundle\Entity\Video $video
+     */
+    public function removeVideo(\Sadbot\Bundle\VideoBundle\Entity\Video $video)
+    {
+        $this->video->removeElement($video);
+    }
+
+    /**
+     * Get video
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVideo()
+    {
+        return $this->video;
+    }
+}

@@ -419,4 +419,27 @@ class Video
     {
         return $this->tags;
     }
+
+    /**
+     * Set thumb
+     *
+     * @param string $thumb
+     * @return Video
+     */
+    public function setThumb($thumb)
+    {
+        $this->thumb = $thumb;
+
+        return $this;
+    }
+
+    /**
+     * Get thumb
+     *
+     * @return string 
+     */
+    public function getThumb()
+    {
+        return $this->thumb;
+    }
 }
