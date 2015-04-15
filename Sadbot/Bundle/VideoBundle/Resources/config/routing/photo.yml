@@ -1,30 +1,41 @@
-photo:
+test:
+    path: /test
+    defaults: { _controller: "SadbotVideoBundle:Photo:test" }
+
+
+
+_photo:
     path:     /
     defaults: { _controller: "SadbotVideoBundle:Photo:index" }
 
-photo_show:
+_photo_show:
     path:     /{id}/show
     defaults: { _controller: "SadbotVideoBundle:Photo:show" }
 
-photo_new:
-    path:     /new
-    defaults: { _controller: "SadbotVideoBundle:Photo:new" }
+_photo_upload:
+    path:     /upload
+    defaults: { _controller: "SadbotVideoBundle:Photo:upload" }
 
-photo_create:
+_photo_create:
     path:     /create
     defaults: { _controller: "SadbotVideoBundle:Photo:create" }
     methods:  POST
 
-photo_edit:
+_photo_edit:
     path:     /{id}/edit
     defaults: { _controller: "SadbotVideoBundle:Photo:edit" }
 
-photo_update:
+_photo_update:
     path:     /{id}/update
     defaults: { _controller: "SadbotVideoBundle:Photo:update" }
     methods:  [POST, PUT]
 
-photo_delete:
+_photo_delete:
     path:     /{id}/delete
     defaults: { _controller: "SadbotVideoBundle:Photo:delete" }
     methods:  [POST, DELETE]
+
+
+_photo_download:
+  path:   /download/{id}
+  defaults: { _controller: "SadbotVideoBundle:Photo:download" }

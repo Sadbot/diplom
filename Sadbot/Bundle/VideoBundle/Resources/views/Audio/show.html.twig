@@ -3,6 +3,10 @@
 {% block body -%}
     <h1>Audio</h1>
 
+    <div>
+        <a href="{{ path('_audio_download',{'id': entity.id}) }}">Download</a>
+    </div>
+
     <table class="record_properties">
         <tbody>
             <tr>
@@ -38,12 +42,12 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('audio') }}">
+        <a href="{{ path('_audio') }}">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('audio_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('_audio_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>

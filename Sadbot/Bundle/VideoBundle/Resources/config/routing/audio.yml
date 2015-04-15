@@ -1,30 +1,35 @@
-audio:
+_audio:
     path:     /
     defaults: { _controller: "SadbotVideoBundle:Audio:index" }
 
-audio_show:
+_audio_show:
     path:     /{id}/show
     defaults: { _controller: "SadbotVideoBundle:Audio:show" }
 
-audio_new:
-    path:     /new
-    defaults: { _controller: "SadbotVideoBundle:Audio:new" }
+_audio_upload:
+    path:     /upload
+    defaults: { _controller: "SadbotVideoBundle:Audio:upload" }
 
-audio_create:
+_audio_create:
     path:     /create
     defaults: { _controller: "SadbotVideoBundle:Audio:create" }
-    methods:  POST
+    methods: [POST]
 
-audio_edit:
+_audio_edit:
     path:     /{id}/edit
     defaults: { _controller: "SadbotVideoBundle:Audio:edit" }
 
-audio_update:
+_audio_update:
     path:     /{id}/update
     defaults: { _controller: "SadbotVideoBundle:Audio:update" }
     methods:  [POST, PUT]
 
-audio_delete:
+_audio_delete:
     path:     /{id}/delete
     defaults: { _controller: "SadbotVideoBundle:Audio:delete" }
     methods:  [POST, DELETE]
+
+
+_audio_download:
+  path:   /download/{id}
+  defaults: { _controller: "SadbotVideoBundle:Audio:download" }

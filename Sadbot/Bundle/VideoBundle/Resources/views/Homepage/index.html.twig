@@ -1,5 +1,9 @@
 {% extends '::base.html.twig' %}
 
+{% block bg %}
+    <img src="{{ asset('bg.jpg') }}" class="bg" alt="bg">
+{% endblock %}
+
 {% block body %}
-    Hi, world!
+    <h1 class="maintext">Медиахостинг</h1>
 {% endblock %}

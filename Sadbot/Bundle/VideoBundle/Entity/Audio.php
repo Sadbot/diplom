@@ -3,12 +3,17 @@
 namespace Sadbot\Bundle\VideoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Audio
  *
  * @ORM\Table(name="audio", indexes={@ORM\Index(name="audio_author_idx", columns={"author"}), @ORM\Index(name="audio_category_idx", columns={"audio_category"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Sadbot\Bundle\VideoBundle\Entity\AudioRepository")
  */
 class Audio
 {
@@ -64,6 +69,17 @@ class Audio
     private $path;
 
     /**
+     * @var string
+     * @Assert\File(
+     *      maxSize = "600M",
+     *      maxSizeMessage = "Слишком большой файл",
+     *      mimeTypes = {"audio/mpeg","audio/ogg"},
+     *      mimeTypesMessage = "Загрузите аудио."
+     * )
+     */
+    private $file;
+
+    /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="\Sadbot\Bundle\UserBundle\Entity\User")
@@ -83,7 +99,111 @@ class Audio
      */
     private $audioCategory;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime;
+        $this->encoded = false;
+    }
 
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/audios';
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getFile()) {
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->path = $filename.'.'.$this->getFile()->guessExtension();  //Yup thats a mime issue. I changed the file "vendor\symfony\symfony\src\Symfony\Component\HttpFoundation\File\MimeType" at the line audio/mpeg which solved my issue
+        }
+    }
+
+    /**
+     * Called before entity removal
+     *
+     * @ORM\PreRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // Use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $this->file->move(
+            $this->getUploadRootDir(),
+            $this->path
+        );
+
+        // Set the path property to the filename where you've saved the file
+        //$this->path = $this->file->getClientOriginalName();
+
+        // Clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
 
     /**
      * Get id

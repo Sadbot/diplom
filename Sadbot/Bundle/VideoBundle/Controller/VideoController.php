@@ -21,7 +21,6 @@ class VideoController extends Controller
     /**
      * Lists all Video entities.
      *
-     * @Route("/", name="video")
      * @Method("GET")
      * @Template()
      */
@@ -38,13 +37,19 @@ class VideoController extends Controller
     /**
      * Creates a new Video entity.
      *
-     * @Route("/", name="video_create")
      * @Method("POST")
      * @Template("SadbotVideoBundle:Video:new.html.twig")
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Video();
+
+        if ($this->getUser()) {
+            $entity->setAuthor($this->getUser());
+        }
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -115,6 +120,8 @@ class VideoController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SadbotVideoBundle:Video')->find($id);

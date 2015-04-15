@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sadbot\Bundle\VideoBundle\Entity\Audio;
 use Sadbot\Bundle\VideoBundle\Form\AudioType;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 /**
  * Audio controller.
  *
@@ -35,7 +39,14 @@ class AudioController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Audio();
+
+        if ($this->getUser()) {
+            $entity->setAuthor($this->getUser());
+        }
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -44,7 +55,7 @@ class AudioController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('audio_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('_audio_show', array('id' => $entity->getId())));
         }
 
         return $this->render('SadbotVideoBundle:Audio:new.html.twig', array(
@@ -63,7 +74,7 @@ class AudioController extends Controller
     private function createCreateForm(Audio $entity)
     {
         $form = $this->createForm(new AudioType(), $entity, array(
-            'action' => $this->generateUrl('audio_create'),
+            'action' => $this->generateUrl('_audio_create'),
             'method' => 'POST',
         ));
 
@@ -76,7 +87,7 @@ class AudioController extends Controller
      * Displays a form to create a new Audio entity.
      *
      */
-    public function newAction()
+    public function uploadAction()
     {
         $entity = new Audio();
         $form   = $this->createCreateForm($entity);
@@ -143,7 +154,7 @@ class AudioController extends Controller
     private function createEditForm(Audio $entity)
     {
         $form = $this->createForm(new AudioType(), $entity, array(
-            'action' => $this->generateUrl('audio_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('_audio_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -172,7 +183,7 @@ class AudioController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('audio_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('_audio_edit', array('id' => $id)));
         }
 
         return $this->render('SadbotVideoBundle:Audio:edit.html.twig', array(
@@ -202,7 +213,7 @@ class AudioController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('audio'));
+        return $this->redirect($this->generateUrl('_audio'));
     }
 
     /**
@@ -215,10 +226,31 @@ class AudioController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('audio_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('_audio_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }
+
+    public function downloadAction($id)
+    {
+        $em = $this->getDoctrine()->getManager()->getRepository('SadbotVideoBundle:Audio');
+
+        $entity = $em->findOnePathById($id);
+
+        $filename = $entity['path'];
+
+        $file = new File($this->get('kernel')->getRootDir().'/../web/uploads/audios/'.$filename);
+
+        $response = new Response(file_get_contents($file->getPathname()));
+
+        $newfilename = md5($file->getBasename()).'.'.$file->getExtension();
+
+        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $newfilename);
+        $response->headers->set('Content-Disposition', $d);
+
+        return $response;
+    }
+
 }

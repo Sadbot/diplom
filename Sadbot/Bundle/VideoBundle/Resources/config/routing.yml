@@ -2,3 +2,14 @@ _homepage:
   path: /
   defaults: { _controller: SadbotVideoBundle:Homepage:index }
 
+sadbot_video:
+    resource: "@SadbotVideoBundle/Resources/config/routing/video.yml"
+    prefix:   /video
+
+sadbot_audio:
+    resource: "@SadbotVideoBundle/Resources/config/routing/audio.yml"
+    prefix:   /audio
+
+sadbot_photo:
+    resource: "@SadbotVideoBundle/Resources/config/routing/photo.yml"
+    prefix:   /photo

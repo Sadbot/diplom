@@ -96,5 +96,7 @@ form:
 main:
     navbar:
       home: Главная
-      upload: Загрузить
+      video: Видео
+      audio: Аудио
+      photo: Фото
       search: Поиск

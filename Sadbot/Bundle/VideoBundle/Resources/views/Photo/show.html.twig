@@ -1,14 +1,41 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}
+    {{ entity.title }}
+{% endblock %}
+
 {% block body -%}
     <h1>Photo</h1>
 
+    <div>
+        <ul class="record_actions">
+            <li>
+                <a href="{{ path('_photo') }}">
+                    Back to the list
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('_photo_edit', { 'id': entity.id }) }}">
+                    Edit
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('_photo_download',{'id':entity.id}) }}">Download</a>
+            </li>
+        </ul>
+
+
+    </div>
+
+    <div>
+        <img src="{{ entity.path | imagine_filter('photo_show') }}"/>
+    </div>
     <table class="record_properties">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
+            {#<tr>#}
+                {#<th>Id</th>#}
+                {#<td>{{ entity.id }}</td>#}
+            {#</tr>#}
             <tr>
                 <th>Title</th>
                 <td>{{ entity.title }}</td>
@@ -18,7 +45,7 @@
                 <td>{{ entity.description }}</td>
             </tr>
             <tr>
-                <th>Createdat</th>
+                <th>Date update:</th>
                 <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
@@ -26,23 +53,12 @@
                 <td>{{ entity.status }}</td>
             </tr>
             <tr>
-                <th>Path</th>
-                <td>{{ entity.path }}</td>
+                <th>Author</th>
+                <td>{{ entity.author }}</td>
             </tr>
+
         </tbody>
     </table>
+    {{ form(delete_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('photo') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('photo_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

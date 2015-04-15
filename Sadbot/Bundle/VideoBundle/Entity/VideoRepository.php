@@ -8,7 +8,7 @@ class VideoRepository extends EntityRepository{
 
     public function findLast10Video()
     {
-        return $this->getEntityManager()
+        return $this->getManager()
             ->createQuery('SELECT v FROM SadbotVideoBundle:Video v ORDER BY v.id ASC')
             ->getResult();
     }

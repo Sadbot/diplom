@@ -15,13 +15,14 @@ class AudioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('file','file')
             ->add('title')
             ->add('description')
-            ->add('encoded')
-            ->add('createdAt')
             ->add('status')
-            ->add('path')
-            ->add('author')
+            ->add('status', 'choice', array(
+                'choices' => array(true =>'public', false => 'private'),
+                'attr' => array('class'=>'form-control')
+            ))
             ->add('audioCategory')
         ;
     }

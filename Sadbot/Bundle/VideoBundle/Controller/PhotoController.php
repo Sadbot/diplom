@@ -2,11 +2,21 @@
 
 namespace Sadbot\Bundle\VideoBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sadbot\Bundle\VideoBundle\Entity\Photo;
 use Sadbot\Bundle\VideoBundle\Form\PhotoType;
+
+use Gaufrette\Filesystem;
+use Gaufrette\Adapter\Local as LocalAdapter;
+use Gaufrette\StreamWrapper;
+
+use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Photo controller.
@@ -35,7 +45,14 @@ class PhotoController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Photo();
+
+        if ($this->getUser()) {
+            $entity->setAuthor($this->getUser());
+        }
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -44,7 +61,7 @@ class PhotoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('photo_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('_photo_show', array('id' => $entity->getId())));
         }
 
         return $this->render('SadbotVideoBundle:Photo:new.html.twig', array(
@@ -63,7 +80,7 @@ class PhotoController extends Controller
     private function createCreateForm(Photo $entity)
     {
         $form = $this->createForm(new PhotoType(), $entity, array(
-            'action' => $this->generateUrl('photo_create'),
+            'action' => $this->generateUrl('_photo_create'),
             'method' => 'POST',
         ));
 
@@ -76,7 +93,7 @@ class PhotoController extends Controller
      * Displays a form to create a new Photo entity.
      *
      */
-    public function newAction()
+    public function uploadAction()
     {
         $entity = new Photo();
         $form   = $this->createCreateForm($entity);
@@ -142,8 +159,11 @@ class PhotoController extends Controller
     */
     private function createEditForm(Photo $entity)
     {
+        $file = new UploadedFile($entity->getAbsolutePath(),$entity->getPath());
+        $entity->setFile($file);
+
         $form = $this->createForm(new PhotoType(), $entity, array(
-            'action' => $this->generateUrl('photo_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('_photo_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -172,7 +192,7 @@ class PhotoController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('photo_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('_photo_edit', array('id' => $id)));
         }
 
         return $this->render('SadbotVideoBundle:Photo:edit.html.twig', array(
@@ -202,7 +222,7 @@ class PhotoController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('photo'));
+        return $this->redirect($this->generateUrl('_photo'));
     }
 
     /**
@@ -215,10 +235,33 @@ class PhotoController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('photo_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('_photo_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }
+
+    public function downloadAction($id)
+    {
+        $em = $this->getDoctrine()->getManager()->getRepository('SadbotVideoBundle:Photo');
+
+        $entity = $em->findOneById($id);
+
+        $filename = $entity['path'];
+
+        $index = $this->renderView('SadbotVideoBundle:Photo:download.html.twig');
+
+        $file = new File($this->get('kernel')->getRootDir().'/../web/uploads/photos/'.$filename);
+
+        $response = new Response(file_get_contents($file->getPathname()));
+
+        $newfilename = md5($file->getBasename()).'.'.$file->getExtension();
+
+        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $newfilename);
+        $response->headers->set('Content-Disposition', $d);
+
+        return $response;
+    }
+
 }
