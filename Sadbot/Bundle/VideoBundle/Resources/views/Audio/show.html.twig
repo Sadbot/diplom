@@ -3,6 +3,11 @@
 {% block body -%}
     <h1>Audio</h1>
 
+    <audio controls>
+        <source src="{{ asset( path ) }}" type="{{ mimeType }}">
+        Тег audio не поддерживается вашим браузером.
+    </audio>
+
     <div>
         <a href="{{ path('_audio_download',{'id': entity.id}) }}">Download</a>
     </div>

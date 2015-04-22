@@ -28,3 +28,7 @@ _video_delete:
   path: /{id}
   defaults: { _controller: SadbotVideoBundle:Video:delete }
   methods: [POST,DELETE]
+
+_video_download:
+  path:   /download/{id}
+  defaults: { _controller: "SadbotVideoBundle:Video:download" }

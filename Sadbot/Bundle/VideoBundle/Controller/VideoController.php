@@ -10,6 +10,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sadbot\Bundle\VideoBundle\Entity\Video;
 use Sadbot\Bundle\VideoBundle\Form\VideoType;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 /**
  * Video controller.
  *
@@ -34,6 +39,22 @@ class VideoController extends Controller
             'entities' => $entities,
         );
     }
+
+    /**
+     * Displays a form to create a new Video entity.
+     *
+     */
+    public function uploadAction()
+    {
+        $entity = new Video();
+        $form   = $this->createCreateForm($entity);
+
+        return $this->render('SadbotVideoBundle:Video:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
     /**
      * Creates a new Video entity.
      *
@@ -97,17 +118,27 @@ class VideoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+
+
         $entity = $em->getRepository('SadbotVideoBundle:Video')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Video entity.');
         }
 
+        $path = 'uploads/videos/'.$entity->getPath();
+
+        $file = new File($path);
+
         $deleteForm = $this->createDeleteForm($id);
+
+        $mimeType = $file->getMimeType();
 
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'path' => $path,
+            'mimeType' => $mimeType
         );
     }
 
@@ -232,5 +263,27 @@ class VideoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    public function downloadAction($id)
+    {
+        $em = $this->getDoctrine()->getManager()->getRepository('SadbotVideoBundle:Video');
+
+        $entity = $em->findOnePathById($id);
+
+        $filename = $entity['path'];
+
+        $index = $this->renderView('SadbotVideoBundle:Video:download.html.twig');
+
+        $file = new File($this->get('kernel')->getRootDir().'/../web/uploads/videos/'.$filename);
+
+        $response = new Response(file_get_contents($file->getPathname()));
+
+        $newfilename = md5($file->getBasename()).'.'.$file->getExtension();
+
+        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $newfilename);
+        $response->headers->set('Content-Disposition', $d);
+
+        return $response;
     }
 }

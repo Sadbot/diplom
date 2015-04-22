@@ -24,9 +24,6 @@ class VideoType extends AbstractType
                 'choices' => array(true =>'public', false => 'private'),
                 'attr' => array('class'=>'form-control')
             ))
-            ->add('save','submit', array(
-                'attr'=> array('class'=> 'btn btn-default')
-            ))
             ->add('tags')
         ;
     }

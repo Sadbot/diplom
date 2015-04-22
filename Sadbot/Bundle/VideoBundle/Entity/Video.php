@@ -108,6 +108,7 @@ class Video
         $this->tags = new ArrayCollection();
         $this->createdAt = new \DateTime;
         $this->encoded = false;
+        $this->thumb = 'default.jpg';
     }
 
     public function getAbsolutePath()

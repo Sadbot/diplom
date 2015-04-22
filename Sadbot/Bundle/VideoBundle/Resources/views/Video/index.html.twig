@@ -6,28 +6,21 @@
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Encoded</th>
                 <th>Createdat</th>
                 <th>Status</th>
-                <th>Path</th>
-                <th>Thumb</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('_video_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.title }}</td>
+                <td><a href="{{ path('_video_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
                 <td>{{ entity.description }}</td>
                 <td>{{ entity.encoded }}</td>
                 <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.status }}</td>
-                <td>{{ entity.path }}</td>
-                <td>{{ entity.thumb }}</td>
                 <td>
                 <ul>
                     <li>

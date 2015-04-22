@@ -2,6 +2,20 @@
 
 {% block body -%}
     <h1>Video</h1>
+    <div>
+        <a href="{{ path('_video_download',{'id':entity.id}) }}">Download</a>
+    </div>
+
+    <video id="example_video_1" class="video-js vjs-default-skin"
+           controls preload="auto" width="640" height="264"
+        <source src='{{ asset( path ) }}' type='{{ mimeType }}'/>
+
+        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+
+    </video>
+
 
     <table class="record_properties">
         <tbody>
