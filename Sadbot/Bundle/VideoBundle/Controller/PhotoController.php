@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sadbot\Bundle\VideoBundle\Entity\Photo;
 use Sadbot\Bundle\VideoBundle\Form\PhotoType;
+use Sadbot\Bundle\VideoBundle\Form\PhotoUpdateType;
 
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
@@ -95,6 +96,8 @@ class PhotoController extends Controller
      */
     public function uploadAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Photo();
         $form   = $this->createCreateForm($entity);
 
@@ -132,6 +135,8 @@ class PhotoController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SadbotVideoBundle:Photo')->find($id);
@@ -162,7 +167,7 @@ class PhotoController extends Controller
         $file = new UploadedFile($entity->getAbsolutePath(),$entity->getPath());
         $entity->setFile($file);
 
-        $form = $this->createForm(new PhotoType(), $entity, array(
+        $form = $this->createForm(new PhotoUpdateType(), $entity, array(
             'action' => $this->generateUrl('_photo_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -177,6 +182,8 @@ class PhotoController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SadbotVideoBundle:Photo')->find($id);
@@ -207,6 +214,8 @@ class PhotoController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

@@ -89,6 +89,8 @@ class AudioController extends Controller
      */
     public function uploadAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Audio();
         $form   = $this->createCreateForm($entity);
 
@@ -132,6 +134,8 @@ class AudioController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SadbotVideoBundle:Audio')->find($id);
@@ -174,6 +178,8 @@ class AudioController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SadbotVideoBundle:Audio')->find($id);
@@ -204,6 +210,8 @@ class AudioController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

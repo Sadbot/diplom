@@ -23,6 +23,20 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class VideoController extends Controller
 {
 
+    public function testAction(){
+
+        $pheanstalk = $this->get('leezy.pheanstalk');
+
+        $pheanstalk
+            ->useTube('video_queue')
+            ->put("Hi, world");
+        $job = $pheanstalk
+            ->watch('video')
+            ->reserve();
+
+        return new Response(var_dump($job));
+    }
+
     /**
      * Lists all Video entities.
      *
@@ -46,6 +60,8 @@ class VideoController extends Controller
      */
     public function uploadAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $entity = new Video();
         $form   = $this->createCreateForm($entity);
 
@@ -76,6 +92,7 @@ class VideoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($entity);
             $em->flush();
 
@@ -117,8 +134,6 @@ class VideoController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-
 
         $entity = $em->getRepository('SadbotVideoBundle:Video')->find($id);
 
@@ -230,6 +245,8 @@ class VideoController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

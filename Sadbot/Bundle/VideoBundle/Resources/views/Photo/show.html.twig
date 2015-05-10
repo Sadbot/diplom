@@ -49,14 +49,13 @@
                 <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Status</th>
-                <td>{{ entity.status }}</td>
-            </tr>
-            <tr>
                 <th>Author</th>
                 <td>{{ entity.author }}</td>
             </tr>
-
+            <tr>
+                <th>Category</th>
+                <td>{{ entity.photoCategory }}</td>
+            </tr>
         </tbody>
     </table>
     {{ form(delete_form) }}

@@ -13,3 +13,7 @@ sadbot_audio:
 sadbot_photo:
     resource: "@SadbotVideoBundle/Resources/config/routing/photo.yml"
     prefix:   /photo
+
+_test:
+    path: /test
+    defaults: { _controller: SadbotVideoBundle:Video:test }

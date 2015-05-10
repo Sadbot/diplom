@@ -66,6 +66,13 @@ class Photo
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     */
+    private $filename;
+
+    /**
+     * @var string
      * @Assert\File(
      *      maxSize = "5M",
      *      maxSizeMessage = "Слишком большой файл",
@@ -119,7 +126,7 @@ class Photo
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+        return '/var/local'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -151,15 +158,18 @@ class Photo
 
     /**
      * @ORM\PrePersist()
-     * @ORM\PreUpdate()
      */
     public function preUpload()
     {
-        if (null !== $this->getFile()) {
-            // do whatever you want to generate a unique name
-            $filename = sha1(uniqid(mt_rand(), true));
-            $this->path = $filename.'.'.$this->getFile()->guessExtension();
+        if (null === $this->getFile())
+        {
+            return;
         }
+
+        // do whatever you want to generate a unique name
+        $filename = sha1(uniqid(mt_rand(), true));
+        $this->path = $filename.'.'.$this->getFile()->guessExtension();
+
     }
 
     /**
@@ -176,7 +186,6 @@ class Photo
 
     /**
      * @ORM\PostPersist()
-     * @ORM\PostUpdate()
      */
     public function upload()
     {
@@ -355,7 +364,7 @@ class Photo
      * @param \Sadbot\Bundle\VideoBundle\Entity\PhotoCategory $photoCategory
      * @return Photo
      */
-    public function setPhotoCategory(\Sadbot\Bundle\UserBundle\Entity\PhotoCategory $photoCategory = null)
+    public function setPhotoCategory(\Sadbot\Bundle\VideoBundle\Entity\PhotoCategory $photoCategory = null)
     {
         $this->photoCategory = $photoCategory;
 

@@ -1,0 +1,10 @@
+sonata.admin.post:
+        class: Sadbot\Bundle\UserBundle\Admin\PostAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Post" }
+        arguments:
+            - ~
+            - Sadbot\Bundle\VideoBundle\Entity\Photo
+            - ~
+        calls:
+            - [ setTranslationDomain, [SadbotUserBundle]]
