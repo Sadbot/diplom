@@ -114,17 +114,11 @@ class AudioController extends Controller
             throw $this->createNotFoundException('Unable to find Audio entity.');
         }
 
-        $path = 'uploads/audios/'.$entity->getPath();
-
-        $file = new File($path);
-
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('SadbotVideoBundle:Audio:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'path'        => $path,
-            'mimeType'    => $file->getMimeType()
         ));
     }
 

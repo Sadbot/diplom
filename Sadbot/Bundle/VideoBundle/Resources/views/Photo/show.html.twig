@@ -1,10 +1,10 @@
 {% extends '::base.html.twig' %}
-
 {% block title %}
     {{ entity.title }}
 {% endblock %}
 
 {% block body -%}
+
     <h1>Photo</h1>
 
     <div>
@@ -28,14 +28,11 @@
     </div>
 
     <div>
-        <img src="{{ entity.path | imagine_filter('photo_show') }}"/>
+        <img src="{{  entity.file.path }}" {{ entity.file.height > 720 ? 'height="720"':''}} alt="{{ entity.title }}"/>
+
     </div>
     <table class="record_properties">
         <tbody>
-            {#<tr>#}
-                {#<th>Id</th>#}
-                {#<td>{{ entity.id }}</td>#}
-            {#</tr>#}
             <tr>
                 <th>Title</th>
                 <td>{{ entity.title }}</td>

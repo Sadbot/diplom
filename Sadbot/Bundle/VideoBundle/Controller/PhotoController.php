@@ -104,6 +104,7 @@ class PhotoController extends Controller
         return $this->render('SadbotVideoBundle:Photo:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+
         ));
     }
 
@@ -122,6 +123,8 @@ class PhotoController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
+
+//        return new Response(dump($entity));
 
         return $this->render('SadbotVideoBundle:Photo:show.html.twig', array(
             'entity'      => $entity,
@@ -164,10 +167,7 @@ class PhotoController extends Controller
     */
     private function createEditForm(Photo $entity)
     {
-        $file = new UploadedFile($entity->getAbsolutePath(),$entity->getPath());
-        $entity->setFile($file);
-
-        $form = $this->createForm(new PhotoUpdateType(), $entity, array(
+        $form = $this->createForm(new PhotoType(), $entity, array(
             'action' => $this->generateUrl('_photo_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -194,6 +194,7 @@ class PhotoController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
+
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -257,11 +258,11 @@ class PhotoController extends Controller
 
         $entity = $em->findOneById($id);
 
-        $filename = $entity['path'];
+        $file = $entity['file_storage_path'].DIRECTORY_SEPARATOR.$entity['file_name'];
 
         $index = $this->renderView('SadbotVideoBundle:Photo:download.html.twig');
 
-        $file = new File($this->get('kernel')->getRootDir().'/../web/uploads/photos/'.$filename);
+        $file = new File($file);
 
         $response = new Response(file_get_contents($file->getPathname()));
 

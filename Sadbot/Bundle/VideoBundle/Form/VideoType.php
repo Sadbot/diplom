@@ -15,7 +15,7 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file','file')
+            ->add('file','iphph_file')
             ->add('title','text')
             ->add('description','textarea',array(
                 'attr'=> array('class'=> 'form-control')

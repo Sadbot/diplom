@@ -3,10 +3,12 @@
 namespace Sadbot\Bundle\VideoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
+use Symfony\Component\Filesystem\Filesystem as FS;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -58,11 +60,39 @@ class Photo
     private $status;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hash", type="string", length=255, nullable=false)
+     */
+    private $hash;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     * @ORM\Column(name="file_storage_path", type="string", length=255, nullable=false)
      */
-    private $path;
+    private $file_storage_path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file_name", type="string", length=255, nullable=false)
+     */
+    private $file_name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file_mime_type", type="string", length=255, nullable=false)
+     */
+    private $file_mime_type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file_size", type="integer")
+     */
+    private $file_size;
 
     /**
      * @var string
@@ -105,28 +135,19 @@ class Photo
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir().'/'.$this->path;
+            : $this->getFileStoragePath().$this->getFileName().'.'.$this->getFile()->guessExtension();
     }
 
     public function getWebPath()
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir().'/'.$this->path;
+            : $this->path.'/'.$this->getFileName().'.'.$this->getFile()->guessExtension($this->getFileMimeType());
     }
 
     protected function getUploadRootDir()
     {
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'uploads/photos';
+        return '/var/photos';
     }
 
     /**
@@ -146,20 +167,27 @@ class Photo
      */
     public function getFile()
     {
-        return $this->file;
+        $file = new File($this->getAbsolutePath());
+
+        return $file;
     }
 
     /**
      * @ORM\PrePersist()
-     * @ORM\PreUpdate()
      */
     public function preUpload()
     {
-        if (null !== $this->getFile()) {
-            // do whatever you want to generate a unique name
-            $filename = sha1(uniqid(mt_rand(), true));
-            $this->path = $filename.'.'.$this->getFile()->guessExtension();
+        if (null === $this->getFile())
+        {
+            return;
         }
+
+        $this->filename = sha1(uniqid(mt_rand(), true));
+        $this->hash = md5($this->path.$this->filename);
+        $this->path = $this->getUploadRootDir().$this->hash;
+
+        $fs = new FS();
+        $fs->mkdir($this->path);
     }
 
     /**
@@ -176,7 +204,6 @@ class Photo
 
     /**
      * @ORM\PostPersist()
-     * @ORM\PostUpdate()
      */
     public function upload()
     {
@@ -184,191 +211,12 @@ class Photo
             return;
         }
 
-        // Use the original file name here but you should
-        // sanitize it at least to avoid any security issues
+        $adapter = new LocalAdapter($this->getUploadDir());
+        $fs = new Filesystem($adapter);
 
-        // move takes the target directory and then the
-        // target filename to move to
-        $this->file->move(
-            $this->getUploadRootDir(),
-            $this->path
-        );
+        $fs->write($this->path, $this->file);
 
-        // Set the path property to the filename where you've saved the file
-        //$this->path = $this->file->getClientOriginalName();
-
-        // Clean up the file property as you won't need it anymore
         $this->file = null;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Photo
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Photo
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Photo
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set status
-     *
-     * @param boolean $status
-     * @return Photo
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return boolean 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return Photo
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string 
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Set author
-     *
-     * @param \Sadbot\Bundle\UserBundle\Entity\User $author
-     * @return Photo
-     */
-    public function setAuthor(\Sadbot\Bundle\UserBundle\Entity\User $author = null)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author
-     *
-     * @return \Sadbot\Bundle\UserBundle\Entity\User
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set photoCategory
-     *
-     * @param \Sadbot\Bundle\VideoBundle\Entity\PhotoCategory $photoCategory
-     * @return Photo
-     */
-    public function setPhotoCategory(\Sadbot\Bundle\UserBundle\Entity\PhotoCategory $photoCategory = null)
-    {
-        $this->photoCategory = $photoCategory;
-
-        return $this;
-    }
-
-    /**
-     * Get photoCategory
-     *
-     * @return \Sadbot\Bundle\VideoBundle\Entity\PhotoCategory 
-     */
-    public function getPhotoCategory()
-    {
-        return $this->photoCategory;
-    }
 }

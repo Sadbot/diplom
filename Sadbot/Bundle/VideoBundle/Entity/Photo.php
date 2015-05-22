@@ -4,19 +4,14 @@ namespace Sadbot\Bundle\VideoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
-use Gaufrette\Filesystem;
-use Gaufrette\Adapter\Local as LocalAdapter;
-
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
 
 /**
  * Photo
  *
  * @ORM\Table(name="photo", indexes={@ORM\Index(name="photo_author_idx", columns={"author"}), @ORM\Index(name="photo_category_idx", columns={"photo_category"})})
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Sadbot\Bundle\VideoBundle\Entity\PhotoRepository")
+ * @FileStore\Uploadable
  */
 class Photo
 {
@@ -58,27 +53,21 @@ class Photo
     private $status;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     * @ORM\Column(name="hash", type="string", length=255, nullable=false)
      */
-    private $path;
+    private $hash;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    private $filename;
-
-    /**
-     * @var string
+     * @ORM\Column(type="array")
      * @Assert\File(
      *      maxSize = "5M",
      *      maxSizeMessage = "Слишком большой файл",
      *      mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
      *      mimeTypesMessage = "Только файловые типы изображения могут быть загружены."
      * )
+     * @FileStore\UploadableField(mapping="photo")
      */
     private $file;
 
@@ -106,50 +95,24 @@ class Photo
     {
         $this->createdAt = new \DateTime;
         $this->encoded = false;
-    }
-
-    public function getAbsolutePath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadRootDir().'/'.$this->path;
-    }
-
-    public function getWebPath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadDir().'/'.$this->path;
-    }
-
-    protected function getUploadRootDir()
-    {
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return '/var/local'.$this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'uploads/photos';
+        $this->hash = md5(srand());
     }
 
     /**
      * Sets file.
-     *
-     * @param UploadedFile $file
+     * @param array $file
+     * @return File
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile($file = null)
     {
         $this->file = $file;
+        return $this;
     }
 
     /**
      * Get file.
      *
-     * @return UploadedFile
+     * @return array
      */
     public function getFile()
     {
@@ -157,63 +120,9 @@ class Photo
     }
 
     /**
-     * @ORM\PrePersist()
-     */
-    public function preUpload()
-    {
-        if (null === $this->getFile())
-        {
-            return;
-        }
-
-        // do whatever you want to generate a unique name
-        $filename = sha1(uniqid(mt_rand(), true));
-        $this->path = $filename.'.'.$this->getFile()->guessExtension();
-
-    }
-
-    /**
-     * Called before entity removal
-     *
-     * @ORM\PreRemove()
-     */
-    public function removeUpload()
-    {
-        if ($file = $this->getAbsolutePath()) {
-            unlink($file);
-        }
-    }
-
-    /**
-     * @ORM\PostPersist()
-     */
-    public function upload()
-    {
-        if (null === $this->getFile()) {
-            return;
-        }
-
-        // Use the original file name here but you should
-        // sanitize it at least to avoid any security issues
-
-        // move takes the target directory and then the
-        // target filename to move to
-        $this->file->move(
-            $this->getUploadRootDir(),
-            $this->path
-        );
-
-        // Set the path property to the filename where you've saved the file
-        //$this->path = $this->file->getClientOriginalName();
-
-        // Clean up the file property as you won't need it anymore
-        $this->file = null;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -236,7 +145,7 @@ class Photo
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -259,7 +168,7 @@ class Photo
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -282,7 +191,7 @@ class Photo
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -305,7 +214,7 @@ class Photo
     /**
      * Get status
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getStatus()
     {
@@ -313,26 +222,26 @@ class Photo
     }
 
     /**
-     * Set path
+     * Set hash
      *
-     * @param string $path
+     * @param string $hash
      * @return Photo
      */
-    public function setPath($path)
+    public function setHash($hash)
     {
-        $this->path = $path;
+        $this->hash = $hash;
 
         return $this;
     }
 
     /**
-     * Get path
+     * Get hash
      *
-     * @return string 
+     * @return string
      */
-    public function getPath()
+    public function getHash()
     {
-        return $this->path;
+        return $this->hash;
     }
 
     /**
@@ -374,7 +283,7 @@ class Photo
     /**
      * Get photoCategory
      *
-     * @return \Sadbot\Bundle\VideoBundle\Entity\PhotoCategory 
+     * @return \Sadbot\Bundle\VideoBundle\Entity\PhotoCategory
      */
     public function getPhotoCategory()
     {
