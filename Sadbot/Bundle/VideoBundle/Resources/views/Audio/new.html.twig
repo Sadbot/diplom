@@ -3,7 +3,27 @@
 {% block body -%}
     <h1>Audio creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_row(form.file) }}
+        </div>
+
+        <div>
+            {{ form_row(form.title) }}
+        </div>
+        <div>
+            {{ form_row(form.description) }}
+        </div>
+        <div>
+            {{ form_row(form.status) }}
+        </div>
+        <div>
+            {{ form_row(form.audioCategory) }}
+        </div>
+
+    {{ form_end(form) }}
 
         <ul class="record_actions">
     <li>

@@ -10,10 +10,10 @@
                 {#</a>#}
             </div>
             <div class="media-body">
-                <h4 class="media-heading">{{ entity.title }}</h4>
+                <h4 class="media-heading"><a href="{{ path('_audio_show',{'id' : entity.id }) }}" {{ entity.title }}</h4>
                 <p>{{ entity.description }}</p>
                 <audio>
-                    <source src="{{ asset(entity.path) }}" type="audio/mpeg">
+                    <source src="{{ entity.file.path }}" type="{{ entity.file.mimeType }}">
                 </audio>
                 <p>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</p>
             </div>

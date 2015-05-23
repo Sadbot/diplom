@@ -76,9 +76,10 @@ class AudioController extends Controller
         $form = $this->createForm(new AudioType(), $entity, array(
             'action' => $this->generateUrl('_audio_create'),
             'method' => 'POST',
+            'translation_domain' => 'VideoBundle'
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'form.create'));
 
         return $form;
     }
@@ -160,9 +161,10 @@ class AudioController extends Controller
         $form = $this->createForm(new AudioType(), $entity, array(
             'action' => $this->generateUrl('_audio_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'translation_domain' => 'VideoBundle'
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'form.update'));
 
         return $form;
     }
@@ -236,7 +238,7 @@ class AudioController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('_audio_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'form.delete'))
             ->getForm()
         ;
     }

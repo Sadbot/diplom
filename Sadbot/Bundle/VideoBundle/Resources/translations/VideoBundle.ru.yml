@@ -1,0 +1,15 @@
+form:
+    create: Создать
+    update: Обновить
+    delete: Удалить
+    file: Загрузить файл
+    title: Название
+    description: Описание
+    status:
+        label: Статус файла
+        public: Публичный
+        private: Приватный
+    category:
+        photo: Категория фотографии
+        audio: Категория аудио
+        video: Категория видео

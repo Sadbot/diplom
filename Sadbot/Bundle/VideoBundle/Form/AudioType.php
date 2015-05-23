@@ -15,15 +15,31 @@ class AudioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file','iphp_file')
-            ->add('title')
-            ->add('description')
-            ->add('status')
+            ->add('file','iphp_file',
+                array(
+                    'label' => 'form.file',
+                ))
+            ->add('title','text',
+                array(
+                    'label' => 'form.title',
+                ))
+            ->add('description','text',
+                array(
+                    'label' => 'form.description',
+                ))
             ->add('status', 'choice', array(
-                'choices' => array(true =>'public', false => 'private'),
-                'attr' => array('class'=>'form-control')
+                'choices' => array(
+                    true =>'form.status.public',
+                    false => 'form.status.private'
+                ),
+                'attr' => array('class'=>'form-control'),
+                'label' => 'form.status.label',
             ))
-            ->add('audioCategory')
+            ->add('audioCategory','entity',
+                array(
+                    'class' => 'Sadbot\Bundle\VideoBundle\Entity\AudioCategory',
+                    'label' => 'form.category.audio',
+                ))
         ;
     }
     

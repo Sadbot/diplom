@@ -4,7 +4,7 @@
     <h1>Audio</h1>
 
     <audio controls>
-        <source src="{{ asset( path ) }}" type="{{ mimeType }}">
+        <source src="{{ entity.file.path }}" type="{{ entity.file.mimeType }}">
         Тег audio не поддерживается вашим браузером.
     </audio>
 
@@ -40,7 +40,7 @@
             </tr>
             <tr>
                 <th>Path</th>
-                <td>{{ entity.path }}</td>
+                <td>{{ entity.file.path }}</td>
             </tr>
         </tbody>
     </table>

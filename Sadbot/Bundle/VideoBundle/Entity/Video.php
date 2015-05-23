@@ -74,9 +74,9 @@ class Video
     private $file;
 
     /**
-     * @var \Sadbot\Bundle\UserBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="\Sadbot\Bundle\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="author", referencedColumnName="id")
      * })
@@ -255,10 +255,10 @@ class Video
     /**
      * Set author
      *
-     * @param \Sadbot\Bundle\UserBundle\Entity\User $author
+     * @param \Application\Sonata\UserBundle\Entity\User $author
      * @return Video
      */
-    public function setAuthor(\Sadbot\Bundle\UserBundle\Entity\User $author = null)
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
 
@@ -268,7 +268,7 @@ class Video
     /**
      * Get author
      *
-     * @return \Sadbot\Bundle\UserBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getAuthor()
     {

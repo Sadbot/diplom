@@ -9,7 +9,7 @@ use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
 /**
  * Photo
  *
- * @ORM\Table(name="photo", indexes={@ORM\Index(name="photo_author_idx", columns={"author"}), @ORM\Index(name="photo_category_idx", columns={"photo_category"})})
+ * @ORM\Table(name="photo")
  * @ORM\Entity(repositoryClass="Sadbot\Bundle\VideoBundle\Entity\PhotoRepository")
  * @FileStore\Uploadable
  */
@@ -74,7 +74,7 @@ class Photo
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="\Sadbot\Bundle\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="author", referencedColumnName="id")
      * })
@@ -247,10 +247,10 @@ class Photo
     /**
      * Set author
      *
-     * @param \Sadbot\Bundle\UserBundle\Entity\User $author
+     * @param \Application\Sonata\UserBundle\Entity\User $author
      * @return Photo
      */
-    public function setAuthor(\Sadbot\Bundle\UserBundle\Entity\User $author = null)
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
 
@@ -260,7 +260,7 @@ class Photo
     /**
      * Get author
      *
-     * @return \Sadbot\Bundle\UserBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getAuthor()
     {

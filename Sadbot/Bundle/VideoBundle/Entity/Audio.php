@@ -27,7 +27,7 @@ class Audio
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     private $title;
@@ -55,7 +55,7 @@ class Audio
 
     /**
      * @var boolean
-     *
+     * @Assert\Choice({1, 0})
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     private $status;
@@ -82,7 +82,7 @@ class Audio
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="\Sadbot\Bundle\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="author", referencedColumnName="id")
      * })
@@ -255,10 +255,10 @@ class Audio
     /**
      * Set author
      *
-     * @param \Sadbot\Bundle\UserBundle\Entity\User $author
+     * @param \Application\Sonata\UserBundle\Entity\User $author
      * @return Audio
      */
-    public function setAuthor(\Sadbot\Bundle\UserBundle\Entity\User $author = null)
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
 
@@ -268,7 +268,7 @@ class Audio
     /**
      * Get author
      *
-     * @return \Sadbot\Bundle\UserBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getAuthor()
     {
