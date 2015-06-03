@@ -1,6 +1,7 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block content -%}
     <h1>Audio list</h1>
     {% for entity in entities %}
         <div class="media">

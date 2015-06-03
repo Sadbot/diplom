@@ -1,0 +1,10 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
+
+{% block title %}Медиамиф{% endblock %}
+
+{% block nav %}
+    {{ include('SadbotVideoBundle:Menu:nav.html.twig') }}
+    {#{{ knp_menu_render('SadbotVideoBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'SadbotVideoBundle:Menu:knp_menu.html.twig'}) }}#}
+    {#{{ knp_menu_render('SadbotVideoBundle:MenuBuilder:userMenu', {'currentClass': 'active', 'template': 'SadbotVideoBundle:Menu:knp_menu.html.twig'}) }}#}
+{% endblock %}

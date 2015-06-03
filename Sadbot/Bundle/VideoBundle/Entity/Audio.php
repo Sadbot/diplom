@@ -9,7 +9,7 @@ use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
 /**
  * Audio
  *
- * @ORM\Table(name="audio", indexes={@ORM\Index(name="audio_author_idx", columns={"author"}), @ORM\Index(name="audio_category_idx", columns={"audio_category"})})
+ * @ORM\Table(name="audio")
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Sadbot\Bundle\VideoBundle\Entity\AudioRepository")
  * @FileStore\Uploadable
@@ -70,13 +70,13 @@ class Audio
     /**
      * @ORM\Column(type="array")
      * @Assert\File(
-     *      maxSize = "17M",
+     *      maxSize = "200M",
      *      maxSizeMessage = "Слишком большой файл",
-     *      mimeTypes = {"audio/mpeg","audio/ogg"},
-     *      mimeTypesMessage = "Загрузите аудио."
+     *      mimeTypes = {"audio/mpeg","audio/ogg","audio/webm","audio/mp4"},
+     *      mimeTypesMessage = "Неизвестный формат файла."
      * )
      * @FileStore\UploadableField(mapping="audio")
-     */
+     **/
     private $file;
 
     /**
@@ -108,8 +108,8 @@ class Audio
 
     /**
      * Sets file.
-     *
-     * @param UploadedFile $file
+     * @param array $file
+     * @return File
      */
     public function setFile($file = null)
     {
@@ -120,7 +120,7 @@ class Audio
     /**
      * Get file.
      *
-     * @return UploadedFile
+     * @return
      */
     public function getFile()
     {

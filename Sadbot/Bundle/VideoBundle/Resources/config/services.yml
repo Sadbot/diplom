@@ -1,4 +1,9 @@
+parameters:
+
 services:
-#    sadbot_video.example:
-#        class: Sadbot\Bundle\VideoBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    sadbot_video.hello.menu.voter.request:
+        class: Sadbot\Bundle\VideoBundle\Menu\RequestVoter
+        arguments:
+            - @service_container
+        tags:
+            - { name: knp_menu.voter }

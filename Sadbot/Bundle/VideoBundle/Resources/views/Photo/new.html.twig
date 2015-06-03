@@ -1,6 +1,7 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block content -%}
     <h1>Photo creation</h1>
 
     {{ form(form) }}

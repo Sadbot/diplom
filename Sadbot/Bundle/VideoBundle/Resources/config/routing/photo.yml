@@ -1,9 +1,3 @@
-test:
-    path: /test
-    defaults: { _controller: "SadbotVideoBundle:Photo:test" }
-
-
-
 _photo:
     path:     /
     defaults: { _controller: "SadbotVideoBundle:Photo:index" }
@@ -34,8 +28,3 @@ _photo_delete:
     path:     /{id}/delete
     defaults: { _controller: "SadbotVideoBundle:Photo:delete" }
     methods:  [POST, DELETE]
-
-
-_photo_download:
-  path:   /download/{id}
-  defaults: { _controller: "SadbotVideoBundle:Photo:download" }

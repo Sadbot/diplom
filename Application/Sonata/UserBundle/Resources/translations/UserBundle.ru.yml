@@ -18,14 +18,20 @@ security:
         password: "Пароль:"
         remember_me: Запомнить меня
         submit: Войти
+        authentication: Аутенетификация
+        forgotten_password: Забыли пароль?
 
 # Profile
 profile:
     show:
+        title: Профиль пользователя %username%
         username: Имя пользователя
         email: Электронная почта
+
     edit:
         submit: Обновить
+        authentication: Изменить профиль
+        password_link: ??sonata_change_password_link
     flash:
         updated: Профиль пользователя обновлен
 

@@ -1,6 +1,8 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block title %}Видео{% endblock %}
+{% block content -%}
     <h1>Video list</h1>
 
     <div>
@@ -13,7 +15,9 @@
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
                 <p>Author: {{ entity.author }}</p>
-                <a href="{{ path('_video_show', { 'id': entity.id }) }}"><img src="{{ entity.thumb | imagine_filter('video_thumbnail') }}"/></a>
+                {% if entity.image and entity.video %}
+                    <a href="{{ path('_video_show', { 'id': entity.id }) }}"><img src="{{ entity.image.path }}" {{ entity.image.height > 250 ? 'height="250"':''}} alt="{{ entity.title }}"/></a>
+                {% endif %}
                 <div class="caption">
                     <h3><a href="{{ path('_video_show', { 'id': entity.id }) }}">{{ entity.title }}</a></h3>
                     <p>{{ entity.description }}</p>
@@ -22,38 +26,5 @@
             </div>
         </div>
     {% endfor %}
-
-    {#<table class="records_list">#}
-        {#<thead>#}
-            {#<tr>#}
-                {#<th>Title</th>#}
-                {#<th>Description</th>#}
-                {#<th>Encoded</th>#}
-                {#<th>Createdat</th>#}
-                {#<th>Status</th>#}
-            {#</tr>#}
-        {#</thead>#}
-        {#<tbody>#}
-        {#{% for entity in entities %}#}
-            {#<tr>#}
-                {#<td><a href="{{ path('_video_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>#}
-                {#<td>{{ entity.description }}</td>#}
-                {#<td>{{ entity.encoded }}</td>#}
-                {#<td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>#}
-                {#<td>{{ entity.status }}</td>#}
-                {#<td>#}
-                {#<ul>#}
-                    {#<li>#}
-                        {#<a href="{{ path('_video_show', { 'id': entity.id }) }}">show</a>#}
-                    {#</li>#}
-                    {#<li>#}
-                        {#<a href="{{ path('_video_edit', { 'id': entity.id }) }}">edit</a>#}
-                    {#</li>#}
-                {#</ul>#}
-                {#</td>#}
-            {#</tr>#}
-        {#{% endfor %}#}
-        {#</tbody>#}
-    {#</table>#}
 
 {% endblock %}

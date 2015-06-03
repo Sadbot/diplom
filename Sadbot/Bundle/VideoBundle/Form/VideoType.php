@@ -15,14 +15,30 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file','iphph_file')
-            ->add('title','text')
+            ->setAttribute('class','fileupload')
+            ->add('video','iphp_file',array(
+                'attr'=>array(
+                    'class' => 'fileupload',
+                    'full_name' => 'file_upload'
+                )
+            ))
+            ->add('image','iphp_file',array(
+                'attr'=>array(
+                    'class' => 'fileupload',
+                    'full_name' => 'file_upload'
+                )
+            ))
+            ->add('title','text',array(
+                'label' => 'form.title'
+            ))
             ->add('description','textarea',array(
-                'attr'=> array('class'=> 'form-control')
+                'attr'=> array('class'=> 'form-control'),
+                'label' => 'form.description'
             ))
             ->add('status', 'choice', array(
                 'choices' => array(true =>'public', false => 'private'),
-                'attr' => array('class'=>'form-control')
+                'attr' => array('class'=>'form-control'),
+                'label' => 'form.status.label'
             ))
             ->add('tags')
         ;
@@ -34,7 +50,8 @@ class VideoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Sadbot\Bundle\VideoBundle\Entity\Video'
+            'data_class' => 'Sadbot\Bundle\VideoBundle\Entity\Video',
+            'translation_domain' => 'VideoBundle'
         ));
     }
 
@@ -45,4 +62,5 @@ class VideoType extends AbstractType
     {
         return 'sadbot_bundle_videobundle_video';
     }
+
 }

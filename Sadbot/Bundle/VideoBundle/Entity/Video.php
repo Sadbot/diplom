@@ -22,7 +22,7 @@ class Video
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -30,48 +30,61 @@ class Video
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      * @Assert\NotBlank
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
-     * @Assert\NotBlank
      */
-    private $description;
+    protected $description;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="encoded", type="boolean", nullable=false)
      */
-    private $encoded;
+    protected $encoded;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
-    private $status;
+    protected $status;
 
     /**
+     * @var
      * @ORM\Column(type="array")
      * @Assert\File(
-     *      maxSize = "600M",
+     *      maxSize = "200M",
      *      maxSizeMessage = "Слишком большой файл",
-     *      mimeTypes = {"video/H264","video/mp4", "video/ogg", "video/quicktime", "video/H261"},
-     *      mimeTypesMessage = "Загрузите видео."
+     *      mimeTypes = {"video/mpeg", "video/mp4", "video/webm", "video/x-flv"},
+     *      mimeTypesMessage = "Поддерживается загрузка файловых типов mpg4, avi, webm."
      * )
      * @FileStore\UploadableField(mapping="video")
      */
-    private $file;
+    protected $video;
+
+    /**
+     * @var
+     * @ORM\Column(type="array")
+     * @Assert\File(
+     *      maxSize = "5M",
+     *      maxSizeMessage = "Слишком большой файл",
+     *      mimeTypes = {"image/jpeg"},
+     *      mimeTypesMessage = "Поддерживается загрузка файловых типов jpg."
+     * )
+     * @FileStore\UploadableField(mapping="thumb")
+     */
+    protected $image;
 
     /**
      * @var \Application\Sonata\UserBundle\Entity\User
@@ -81,23 +94,23 @@ class Video
      *   @ORM\JoinColumn(name="author", referencedColumnName="id")
      * })
      */
-    private $author;
+    protected $author;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
      * @ORM\JoinTable(name="videos_tags",
      *      joinColumns={@ORM\JoinColumn(name="video_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      *      )
      **/
-    private $tags;
+    protected $tags;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="hash", type="string", length=255, nullable=false)
      */
-    private $hash;
+    protected $hash;
 
     public function __construct()
     {
@@ -107,25 +120,37 @@ class Video
     }
 
     /**
-     * Sets file.
-     * @param array $file
-     * @return File
+     * @param  $video
      */
-    public function setFile($file = null)
+    public function setVideo($video)
     {
-        $this->file = $file;
-        return $this;
+        $this->video = $video;
     }
 
     /**
-     * Get file.
-     *
-     * @return array
+     * @return $video
      */
-    public function getFile()
+    public function getVideo()
     {
-        return $this->file;
+        return $this->video;
     }
+
+    /**
+     * @param  $video
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return $video
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
 
     /**
      * Get id
@@ -212,7 +237,7 @@ class Video
      * @param \DateTime $createdAt
      * @return Video
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt=null)
     {
         $this->createdAt = $createdAt;
 

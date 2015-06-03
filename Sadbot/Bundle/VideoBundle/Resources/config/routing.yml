@@ -16,4 +16,4 @@ sadbot_photo:
 
 _test:
     path: /test
-    defaults: { _controller: SadbotVideoBundle:Video:test }
+    defaults: { _controller: SadbotVideoBundle:Homepage:test }

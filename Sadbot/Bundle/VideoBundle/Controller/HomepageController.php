@@ -24,4 +24,9 @@ class HomepageController extends Controller
         return $this->render('SadbotVideoBundle:Homepage:index.html.twig');
     }
 
+    public function testAction(){
+        return $this->redirectToRoute('_homepage');
+
+
+    }
 }

@@ -1,15 +1,26 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
-    <h1>Video creation</h1>
+{% block title %}Загрузка видео{% endblock %}
 
-    {{ form(form) }}
+{% block content -%}
+    <h1>Загрузите видео:</h1>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('_video') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    {{ form_start(form, {'attr':{ 'class': 'dropzone' }}) }}
+        {{ form_errors(form) }}
+
+        {{ form_row(form.video,{ 'attr': {'label': 'form.video.file'}  }) }}
+        {{ form_row(form.image,{ 'attr': {'label': 'form.video.image'} }) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.tags) }}
+    {{ form_end(form) }}
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('_video') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}

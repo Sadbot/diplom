@@ -1,8 +1,5 @@
-Sadbot\Bundle\VideoBundle\Entity\Video:
-    properties:
-      title:
-        - NotBlank: ~
-        - Length:
-            min: 3
-      description:
-        - NotBlank: ~
+Sadbot\Bundle\VideoBundle\Form\VideoType:
+    constraints:
+        - Sonata\AdminBundle\Validator\Constraints\InlineConstraint:
+            service: sadbot.validation.video_apply
+            method: validate

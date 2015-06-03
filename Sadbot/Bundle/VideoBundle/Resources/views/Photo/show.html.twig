@@ -1,9 +1,10 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+
 {% block title %}
     {{ entity.title }}
 {% endblock %}
 
-{% block body -%}
+{% block content -%}
 
     <h1>Photo</h1>
 
@@ -19,9 +20,9 @@
                     Edit
                 </a>
             </li>
-            <li>
-                <a href="{{ path('_photo_download',{'id':entity.id}) }}">Download</a>
-            </li>
+            {#<li>#}
+                {#<a href="{{ path('_photo_download',{'id':entity.id}) }}">Download</a>#}
+            {#</li>#}
         </ul>
 
 
@@ -55,6 +56,5 @@
             </tr>
         </tbody>
     </table>
-    {{ form(delete_form) }}
 
 {% endblock %}

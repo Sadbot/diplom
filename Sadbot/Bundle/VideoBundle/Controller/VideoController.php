@@ -23,20 +23,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class VideoController extends Controller
 {
 
-    public function testAction(){
-
-        $pheanstalk = $this->get('leezy.pheanstalk');
-
-        $pheanstalk
-            ->useTube('video_queue')
-            ->put("Hi, world");
-        $job = $pheanstalk
-            ->watch('video')
-            ->reserve();
-
-        return new Response(var_dump($job));
-    }
-
     /**
      * Lists all Video entities.
      *
@@ -58,14 +44,32 @@ class VideoController extends Controller
      * Displays a form to create a new Video entity.
      *
      */
-    public function uploadAction()
+    public function uploadAction(Request $request = null)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 
         $entity = new Video();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createForm(new VideoType(), $entity);
+        $form->add('submit', 'submit', array('label' => 'form.create'));
 
-        return $this->render('SadbotVideoBundle:Video:new.html.twig', array(
+
+        if ($request)
+            $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            if ($this->getUser()) {
+                $entity->setAuthor($this->getUser());
+            }
+
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('_video_show', array('id' => $entity->getId())));
+        }
+
+        return $this->render('SadbotVideoBundle:Video:new.html.twig',array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -91,6 +95,9 @@ class VideoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $helper = $this->container->get('oneup_uploader.templating.uploader_helper');
+            $endpoint = $helper->endpoint('video');
+
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($entity);
@@ -114,12 +121,9 @@ class VideoController extends Controller
      */
     private function createCreateForm(Video $entity)
     {
-        $form = $this->createForm(new VideoType(), $entity, array(
-            'action' => $this->generateUrl('_video_create'),
-            'method' => 'POST',
-        ));
+        $form = $this->createForm(new VideoType(), $entity);
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'form.create'));
 
         return $form;
     }
@@ -141,19 +145,11 @@ class VideoController extends Controller
             throw $this->createNotFoundException('Unable to find Video entity.');
         }
 
-        $path = 'uploads/videos/'.$entity->getPath();
-
-        $file = new File($path);
-
         $deleteForm = $this->createDeleteForm($id);
-
-        $mimeType = $file->getMimeType();
 
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'path' => $path,
-            'mimeType' => $mimeType
         );
     }
 
@@ -240,8 +236,6 @@ class VideoController extends Controller
     /**
      * Deletes a Video entity.
      *
-     * @Route("/{id}", name="video_delete")
-     * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -262,7 +256,7 @@ class VideoController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('_video_homepage'));
+        return $this->redirect($this->generateUrl('_video'));
     }
 
     /**
@@ -282,25 +276,5 @@ class VideoController extends Controller
         ;
     }
 
-    public function downloadAction($id)
-    {
-        $em = $this->getDoctrine()->getManager()->getRepository('SadbotVideoBundle:Video');
 
-        $entity = $em->findOnePathById($id);
-
-        $filename = $entity['path'];
-
-        $index = $this->renderView('SadbotVideoBundle:Video:download.html.twig');
-
-        $file = new File($this->get('kernel')->getRootDir().'/../web/uploads/videos/'.$filename);
-
-        $response = new Response(file_get_contents($file->getPathname()));
-
-        $newfilename = md5($file->getBasename()).'.'.$file->getExtension();
-
-        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $newfilename);
-        $response->headers->set('Content-Disposition', $d);
-
-        return $response;
-    }
 }

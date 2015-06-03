@@ -1,27 +1,20 @@
-{#
-
-This file is part of the Sonata package.
-
-(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
-
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-
-#}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "UserBundle" %}
 
 {% sonata_template_box 'This is the user authentication edition template. Feel free to override it.' %}
 
+{% block content %}
 <div class="row">
     <div class="span6 col-lg-6">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">{{ 'title_user_edit_authentication'|trans({}, 'SonataUserBundle') }}</h3>
+                <h3 class="panel-title">{{ 'profile.edit.authentication'|trans() }}</h3>
             </div>
             <div class="panel-body">
                 <form action="{{ path('sonata_user_profile_edit_authentication') }}" method="POST" class="form-horizontal">
                     {{ form_widget(form) }}
 
-                    <button type="submit" name="submit" class="btn btn-primary pull-right">{{ 'sonata_user_submit'|trans({}, 'SonataUserBundle') }}</button>
+                    <button type="submit" name="submit" class="btn btn-primary pull-right">{{ 'profile.edit.submit'|trans() }}</button>
                 </form>
             </div>
         </div>
@@ -29,7 +22,7 @@ file that was distributed with this source code.
     <div class="span6 col-lg-6">
         <div class="panel panel-danger">
             <div class="panel-heading">
-                <h3 class="panel-title">{{ 'sonata_change_password_link'|trans({}, 'SonataUserBundle') }}</h3>
+                <h3 class="panel-title">{{ 'profile.edit.password_link'|trans({}, 'SonataUserBundle') }}</h3>
             </div>
             <div class="panel-body">
                 {% render url("sonata_user_change_password") %}
@@ -37,3 +30,4 @@ file that was distributed with this source code.
         </div>
     </div>
 </div>
+{% endblock %}

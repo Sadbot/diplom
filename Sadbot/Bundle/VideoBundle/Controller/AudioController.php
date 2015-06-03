@@ -11,6 +11,7 @@ use Sadbot\Bundle\VideoBundle\Form\AudioType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Sonata\MediaBundle\Document\MediaManager;
 
 /**
  * Audio controller.
@@ -51,7 +52,9 @@ class AudioController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($entity);
             $em->flush();
 
@@ -76,7 +79,6 @@ class AudioController extends Controller
         $form = $this->createForm(new AudioType(), $entity, array(
             'action' => $this->generateUrl('_audio_create'),
             'method' => 'POST',
-            'translation_domain' => 'VideoBundle'
         ));
 
         $form->add('submit', 'submit', array('label' => 'form.create'));
@@ -161,7 +163,6 @@ class AudioController extends Controller
         $form = $this->createForm(new AudioType(), $entity, array(
             'action' => $this->generateUrl('_audio_update', array('id' => $entity->getId())),
             'method' => 'PUT',
-            'translation_domain' => 'VideoBundle'
         ));
 
         $form->add('submit', 'submit', array('label' => 'form.update'));

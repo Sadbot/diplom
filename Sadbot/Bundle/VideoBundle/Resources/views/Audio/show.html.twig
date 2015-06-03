@@ -1,15 +1,16 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block content -%}
     <h1>Audio</h1>
 
-    <audio controls>
-        <source src="{{ entity.file.path }}" type="{{ entity.file.mimeType }}">
-        Тег audio не поддерживается вашим браузером.
-    </audio>
+    {#<audio controls>#}
+        {#<source src="{{ entity.file.path }}" type="{{ entity.file.mimeType }}">#}
+        {#Тег audio не поддерживается вашим браузером.#}
+    {#</audio>#}
 
     <div>
-        <a href="{{ path('_audio_download',{'id': entity.id}) }}">Download</a>
+        <a href="{{ path('sonata_media_download', {'id': media|sonata_urlsafeid }) }}">Download file</a>
     </div>
 
     <table class="record_properties">
@@ -56,6 +57,5 @@
             Edit
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
 </ul>
 {% endblock %}

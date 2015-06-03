@@ -1,13 +1,16 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block title %}Загрузка аудио{% endblock %}
+
+{% block content -%}
     <h1>Audio creation</h1>
 
     {{ form_start(form) }}
         {{ form_errors(form) }}
 
         <div>
-            {{ form_row(form.file) }}
+            {{ form_row(form.file, { 'attr' : {'id' : 'fileupload' } }  ) }}
         </div>
 
         <div>

@@ -1,29 +1,33 @@
-{% extends '::base.html.twig' %}
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
 
-{% block body -%}
+{% block content -%}
     <h1>Video</h1>
 
     <ul class="record_actions">
         <li>
             <a href="{{ path('_video') }}">Back to the list</a>
         </li>
-        <li>
-            <a href="{{ path('_video_download',{'id':entity.id}) }}">Download</a>
-        </li>
+        {#<li>#}
+            {#<a href="{{ path('_video_download',{'id':entity.id}) }}">Download</a>#}
+        {#</li>#}
         <li>
             <a href="{{ path('_video_edit', { 'id': entity.id }) }}">Edit</a>
         </li>
     </ul>
+    {% if entity.video and entity.image %}
+        <video id="example_video_1" class="video-js vjs-default-skin"
+               controls preload="auto" width="640" height="264"
+               poster="{{ entity.image.path }}"
+            <source src='{{ entity.video.path }}' type='{{ entity.video.mimeType }}'/>
 
-    <video id="example_video_1" class="video-js vjs-default-skin"
-           controls preload="auto" width="640" height="264"
-        <source src='{{ asset( path ) }}' type='{{ mimeType }}'/>
-
-        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
-            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-    </video>
-
+            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+    {% else %}
+        {{ 'error.video.path' | trans }}
+    {% endif %}
 
     <table class="record_properties">
         <tbody>
@@ -41,6 +45,4 @@
             </tr>
         </tbody>
     </table>
-
-    {{ form(delete_form) }}
 {% endblock %}

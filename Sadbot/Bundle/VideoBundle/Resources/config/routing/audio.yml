@@ -28,8 +28,3 @@ _audio_delete:
     path:     /{id}/delete
     defaults: { _controller: "SadbotVideoBundle:Audio:delete" }
     methods:  [POST, DELETE]
-
-
-_audio_download:
-  path:   /download/{id}
-  defaults: { _controller: "SadbotVideoBundle:Audio:download" }

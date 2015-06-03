@@ -2,30 +2,40 @@
 namespace Sadbot\Bundle\VideoBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 
-class MenuBuilder
+class MenuBuilder extends ContainerAware
 {
-    private $factory;
-
-    /**
-     * @param FactoryInterface $factory
-     */
-    public function __construct(FactoryInterface $factory)
+    public function mainMenu(FactoryInterface $factory, array $options)
     {
-        $this->factory = $factory;
+        $menu = $factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'nav');
+
+        $menu->addChild('Home', array('route' => '_homepage'))
+            ->setAttribute('icon', 'icon-list');
+
+        return $menu;
     }
 
-    public function createMainMenu(RequestStack $requestStack)
+    public function userMenu(FactoryInterface $factory, array $options)
     {
-        $menu = $this->factory->createItem('root');
+        $menu = $factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'nav pull-right');
 
-        $menu->addChild('Home', array('route' => '_homepage'));
+        /*
+        You probably want to show user specific information such as the username here. That's possible! Use any of the below methods to do this.
 
-        $menu->addChild('Фото', array('route' => '_photo'));
-        $menu->addChild('Видео', array('route' => '_video'));
-        $menu->addChild('Аудио', array('route' => '_audio'));
+        if($this->container->get('security.context')->isGranted(array('ROLE_ADMIN', 'ROLE_USER'))) {} // Check if the visitor has any authenticated roles
+        $username = $this->container->get('security.context')->getToken()->getUser()->getUsername(); // Get username of the current logged in user
+
+        */
+        $menu->addChild('User', array('label' => 'Hi visitor'))
+            ->setAttribute('dropdown', true)
+            ->setAttribute('icon', 'icon-user');
+
+        $menu['User']->addChild('Edit profile', array('route' => 'acme_hello_profile'))
+            ->setAttribute('icon', 'icon-edit');
 
         return $menu;
     }

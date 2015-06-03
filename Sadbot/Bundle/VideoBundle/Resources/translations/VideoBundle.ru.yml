@@ -1,3 +1,43 @@
+# Group
+group:
+    edit:
+        submit: Обновить группу
+    show:
+        name: Название группы
+    new:
+        submit: Создать группу
+    flash:
+        updated: Группа обновлена
+        created: Группа создана
+        deleted: Группа удалена
+
+# Global strings
+layout:
+    logout: Выход
+    login: Вход
+    register: Регистрация
+    logged_in_as: Вы вошли как
+
+# Form field labels
+form:
+    group_name: "Название группы:"
+    username: "Имя пользователя:"
+    email: "Электронная почта:"
+    current_password: "Текущий пароль:"
+    password: "Пароль:"
+    password_confirmation: "Подтвердите пароль:"
+    new_password: "Новый пароль:"
+    new_password_confirmation: "Подтвердите пароль:"
+
+main:
+    navbar:
+      home: Главная
+      video: Видео
+      audio: Аудио
+      photo: Фото
+      search: Поиск
+
+# Form upload labels
 form:
     create: Создать
     update: Обновить
@@ -13,3 +53,6 @@ form:
         photo: Категория фотографии
         audio: Категория аудио
         video: Категория видео
+error:
+    video:
+        path: Ошибка загрузки файла!

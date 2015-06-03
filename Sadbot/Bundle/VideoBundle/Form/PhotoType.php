@@ -22,7 +22,11 @@ class PhotoType extends AbstractType
                 'choices' => array(true =>'public', false => 'private'),
                 'attr' => array('class'=>'form-control')
             ))
-            ->add('photoCategory','entity')
+            ->add('photoCategory','entity',
+                array(
+                    'class' => 'Sadbot\Bundle\VideoBundle\Entity\PhotoCategory',
+                    'label' => 'form.category.photo',
+            ))
         ;
     }
     

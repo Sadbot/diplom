@@ -12,7 +12,7 @@ _video_create:
   methods: [POST]
 
 _video_show:
-  path: /{id}
+  path: /{id}/show
   defaults: { _controller: SadbotVideoBundle:Video:show }
 
 _video_edit:
@@ -20,15 +20,12 @@ _video_edit:
   defaults: { _controller: SadbotVideoBundle:Video:edit }
 
 _video_update:
-  path: /{id}
+  path: /{id}/update
   defaults: { _controller: SadbotVideoBundle:Video:update }
   methods: [POST,PUT]
 
 _video_delete:
-  path: /{id}
+  path: /{id}/delete
   defaults: { _controller: SadbotVideoBundle:Video:delete }
   methods: [POST,DELETE]
 
-_video_download:
-  path:   /download/{id}
-  defaults: { _controller: "SadbotVideoBundle:Video:download" }

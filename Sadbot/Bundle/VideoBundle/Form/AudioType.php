@@ -15,10 +15,9 @@ class AudioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file','iphp_file',
-                array(
-                    'label' => 'form.file',
-                ))
+            ->add('file','iphp_file', array(
+                'label' => 'form.file',
+            ))
             ->add('title','text',
                 array(
                     'label' => 'form.title',
@@ -49,7 +48,8 @@ class AudioType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Sadbot\Bundle\VideoBundle\Entity\Audio'
+            'data_class' => 'Sadbot\Bundle\VideoBundle\Entity\Audio',
+            'translation_domain' => 'VideoBundle'
         ));
     }
 
