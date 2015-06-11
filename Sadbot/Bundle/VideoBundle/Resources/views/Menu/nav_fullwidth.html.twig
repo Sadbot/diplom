@@ -1,0 +1,66 @@
+{% trans_default_domain "VideoBundle" %}
+{% block nav %}
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <a class="navbar-brand" href="{{ path('_homepage') }}">Миф</a>
+        </div>
+
+        {#{{ knp_menu_render('SadbotVideoBundle:Builder:mainMenu') }}#}
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ path('_homepage') }}"><span class="fa fa-home"></span>&nbsp;{{ 'main.navbar.home'|trans() }}</a></li>
+                <li>
+                    <a href="{{ path('_video') }}">
+                        <span class="fa fa-video-camera"></span>&nbsp;{{ 'main.navbar.video'|trans() }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('_photo') }}">
+                        <span class="fa fa-camera"></span>&nbsp;{{ 'main.navbar.photo'|trans() }}
+
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('_audio') }}">
+                        <span class="fa fa-music"></span>&nbsp;{{ 'main.navbar.audio'|trans() }}
+
+                    </a>
+                </li>
+            </ul>
+
+
+
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="{{ 'main.navbar.search'|trans() }}">
+                </div>
+                <button type="submit" class="btn btn-default"><span class="fa fa-search"></span></button>
+            </form>
+
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <p class="navbar-text navbar-right">
+                    {{ 'layout.logged_in_as'|trans() }}&nbsp;<a class="navbar-link" href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a class="navbar-link" href="{{ path('fos_user_security_logout') }}">
+                        <i class="fa fa-sign-out"></i>
+                    </a>
+                </p>
+            {% else %}
+                <p class="navbar-text navbar-right">
+                    <a class="navbar-link" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans() }}</a>
+                </p>
+            {% endif %}
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}

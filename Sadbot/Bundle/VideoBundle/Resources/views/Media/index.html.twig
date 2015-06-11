@@ -1,0 +1,31 @@
+{% extends 'SadbotVideoBundle::layout.html.twig' %}
+{% trans_default_domain "VideoBundle" %}
+
+{% block title %}{{ 'media.photo.title' |trans() }}{% endblock %}
+
+{% block content -%}
+    <h1>{{ 'media.photo.title' |trans() }}</h1>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div>
+            <a href="{{ path('_photo_upload') }}">
+                {{ 'media.create_entry' | trans() }}
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="row">
+    {% for entity in entities %}
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <a href="{{ path('_photo_show', { 'id': entity.id }) }}"><img src="{{ entity.file.path }}" {{ entity.file.height > 250 ? 'height="250"':''}} alt="{{ entity.title }}"/></a>
+                <div class="caption">
+                    <h3><a href="{{ path('_photo_show', { 'id': entity.id }) }}">{{ entity.title }}</a></h3>
+                    <p>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</p>
+                    <p>{{ entity.author }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>
+{% endblock %}
